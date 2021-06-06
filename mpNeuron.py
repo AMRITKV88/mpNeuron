@@ -7,6 +7,8 @@
 from sklearn import datasets
 import numpy as np
 import pandas as pd
+from sklearn.metrics import accuracy_score
+
 breast_cancer = datasets.load_breast_cancer()
 X = breast_cancer.data
 Y = breast_cancer.target
@@ -113,5 +115,42 @@ for b in range(binarised_X_train.shape[1] + 1):
         old_acucracy = accuracy
         old_b = b
 print("Highest training acuuracy for the value of b is :",old_b, "and highest training accuracy is :",old_acucracy)
+
+# %% [markdown]
+# MP Neuron Class
+
+# %%
+class mpNeuron:
+    def __init__(self):
+        self.b = None
+
+    def model(self, x):
+        return (np.sum(x) >=self.b)
+
+    def predict(self, X):
+        y = []
+        for x in X:
+            y_pred = self.model(x)
+            y.append(y_pred)
+        return y
+
+    def fit(self, X, Y):
+        accuracy = {}
+        for b in range(binarised_X_train.shape[1] + 1):
+            self.b = b
+            accurate_pred = 0
+            y_pred_train_list = self.predict(X)
+            accuracy[b] = accuracy_score(y_pred_train_list, Y)
+        best_b = max(accuracy, key = accuracy.get)
+        print("Optimal accuracy found for b =",best_b,"and the accuracy value is =",accuracy[best_b])
+
+
+# %%
+mp_Neuron = mpNeuron()
+mp_Neuron.fit(binarised_X_train, Y_train)
+
+
+# %%
+
 
 
